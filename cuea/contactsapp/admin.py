@@ -1,3 +1,7 @@
 from django.contrib import admin
+from contactsapp.models import *
 
-# Register your models here.
+
+admin.site.register(EmployeeService)
+admin.site.register(EmployeeVote)
+admin.site.register(Employees)
