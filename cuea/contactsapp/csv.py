@@ -12,6 +12,9 @@ class CSVReader:
         for i, emp in df.iterrows():
             print(i,emp)
             employee = Employees()
+            if employee.is_old_employee(emp.PFNo):
+                employee = Employees.objects.get(pf_number = emp.PFNo)
+
             employee.name = emp.Name
             employee.pf_number = emp.PFNo
             employee.sex = emp.Sex
@@ -25,7 +28,7 @@ class CSVReader:
             employee_service.employee = employee
             employee_service.designation = emp.Designation
             employee_service.department = emp.Dept
-            employee_service.membership = "Association"
+            employee_service.membership = emp.Membership
             employee_service.save()
 
 
