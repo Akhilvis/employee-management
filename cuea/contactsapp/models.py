@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import Q
+
 
 class Employees(models.Model):
     pf_number = models.IntegerField()
@@ -12,6 +14,15 @@ class Employees(models.Model):
 
     def is_old_employee(self, pf_num):
         return Employees.objects.filter(pf_number = pf_num).exists()
+    
+    def get_all_employees(self):
+        return Employees.objects.select_related('employeeservice').select_related('employeevote').all()
+
+    def get_searched_employee(self, seach_key):
+        searched_employees = Employees.objects.select_related('employeeservice').select_related('employeevote').filter(
+                    Q(name__icontains=seach_key) | Q(sex__icontains=seach_key) | Q(employeeservice__designation__icontains=seach_key)
+                )
+        return searched_employees
 
     def __str__(self):
         return self.name 

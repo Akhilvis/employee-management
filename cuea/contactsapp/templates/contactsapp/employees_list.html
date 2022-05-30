@@ -49,8 +49,7 @@
           </li>
         </ul>
         <ul class="navbar-nav ms-auto" style="width: 80%;">
-          <form action="search-employee" method="post">
-            {% csrf_token %}
+          <form action="search-employee" method="get">
           <li class="nav-item" style="display: inline-flex;width: 100%;">
             <input class="form-control" type="text" name="search_keyword" placeholder="Search Name,Gender,Designation etc..." aria-label="Search" style="height: 1%;">
             <button type="submit" class="btn btn-success" style="width: 25%;">Seach</button>
@@ -341,7 +340,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        {% for emp in employees %}
+                        {% for emp in employees_list %}
                         <tr>
                           <td class="py-1">
                             {% if emp.sex == 'M'%}

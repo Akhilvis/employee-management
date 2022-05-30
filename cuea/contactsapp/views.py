@@ -1,21 +1,22 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.db.models import Q
 
 from .utils import *
 from .forms import *
 from .csv import CSVReader
 from .models import *
 
+from django.views.generic import ListView
+
 # Create your views here.
 
 
 
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'contactsapp/index.html')
 
 def upload_csv(request):
-    return render(request, 'uploadcsv.html')
+    return render(request, 'contactsapp/uploadcsv.html')
 
 def csv_process(request):
     csv_data = request.FILES['csv']
@@ -29,17 +30,16 @@ def csv_process(request):
             success_message = 'Uploaded Successfuly'
             csv_reader = CSVReader()
             csv_reader.feed_db()
-    return render(request, 'uploadcsv.html', {'success_message': success_message})
+    return render(request, 'contactsapp/uploadcsv.html', {'success_message': success_message})
 
-def list_employees(request):
-    employees = Employees.objects.select_related('employeeservice').select_related('employeevote').all()
-    return render(request, 'list_employees.html', {'employees': employees})
+class EmployeesListView(ListView):
+    paginate_by = 20
+    def get_queryset(self):
+        employee_object = Employees()
+        return employee_object.get_all_employees()
 
-def search_employee(request):
-    seach_key = request.POST.get('search_keyword')
-    print(seach_key)
-
-    searched_employees = Employees.objects.select_related('employeeservice').select_related('employeevote').filter(
-            Q(name__icontains=seach_key) | Q(sex__icontains=seach_key) | Q(employeeservice__designation__icontains=seach_key)
-        )
-    return render(request, 'list_employees.html', {'employees': searched_employees})
+class SearchEmployeeListView(ListView):
+    def get_queryset(self):
+        seach_key = self.request.GET.get('search_keyword')
+        employee_object = Employees()
+        return employee_object.get_searched_employee(seach_key)
