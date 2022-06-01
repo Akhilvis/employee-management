@@ -1,16 +1,45 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth import authenticate, login, logout
+
 
 from .utils import *
 from .forms import *
 from .csv import CSVReader
 from .models import *
 
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView, View
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
 
+class LoginView(View):
+    template_name = "contactsapp/login.html"
+    
+    def get(self, request):
+        return render(request, self.template_name)
+        
+    def post(self, request):
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            user = authenticate(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password'],
+            )
+            if user is not None:
+                login(request, user)
+                return redirect('dashboard-view')
+        message = 'Login failed!'
+        return render(request, self.template_name, context={'message': message})
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return HttpResponseRedirect('/')
+
+class DashboardView(LoginRequiredMixin, TemplateView):
+    template_name = "contactsapp/index.html"
 
 def index(request):
     return render(request, 'contactsapp/index.html')
@@ -32,13 +61,20 @@ def csv_process(request):
             csv_reader.feed_db()
     return render(request, 'contactsapp/uploadcsv.html', {'success_message': success_message})
 
-class EmployeesListView(ListView):
+class EmployeesListView(LoginRequiredMixin, ListView):
     paginate_by = 20
-    def get_queryset(self):
-        employee_object = Employees()
-        return employee_object.get_all_employees()
+    employee_object = Employees()
 
-class SearchEmployeeListView(ListView):
+    def get_queryset(self):
+        return self.employee_object.get_all_employees()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter_data'] = self.employee_object.get_filter_data()
+        return context
+
+
+class SearchEmployeeListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         seach_key = self.request.GET.get('search_keyword')
         employee_object = Employees()

@@ -18,6 +18,7 @@ class CSVReader:
             employee.name = emp.Name
             employee.pf_number = emp.PFNo
             employee.sex = emp.Sex
+            employee.mobile = emp.Mob
             employee.blood_group = emp.Blood
             employee.adddress = emp.Address
             employee.district = emp.District
@@ -30,6 +31,15 @@ class CSVReader:
             employee_service.department = emp.Dept
             employee_service.membership = emp.Membership
             employee_service.save()
+
+            employee_vote = EmployeeVote()
+            employee_vote.employee = employee
+            employee_vote.legislative_assembly = emp.LegislativeAssembly
+            employee_vote.loksabha_constituency = emp.LokSabhaConstituency
+            employee_vote.voters_id = emp.VotersId
+            employee_vote.deshabhimani_sub = emp.Deshabimanisubscription
+            employee_vote.subscription_amount = emp.Yearlysubscription
+            employee_vote.save()
 
 
 
