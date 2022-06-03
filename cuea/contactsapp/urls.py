@@ -12,5 +12,6 @@ urlpatterns = [
     path('csv-data-upload', csv_process, name='csv_process'),
     path('employees', EmployeesListView.as_view(), name="list_employee_view"),
     path('search-employee', SearchEmployeeListView.as_view(), name='search_employee'),
+    path('filter-employees', FilterEmployeeListView.as_view(), name="filter_list_employee_view"),
 
 ]

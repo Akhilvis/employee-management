@@ -1,3 +1,4 @@
+from urllib import request
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
@@ -65,14 +66,25 @@ class EmployeesListView(LoginRequiredMixin, ListView):
     paginate_by = 20
     employee_object = Employees()
 
-    def get_queryset(self):
+    def get_queryset(self, *args, **kwargs):
+        url_params = self.request.GET
         return self.employee_object.get_all_employees()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['filter_data'] = self.employee_object.get_filter_data()
+        context['filter_data'] = self.employee_object.get_filter_popup_data()
         return context
 
+class FilterEmployeeListView(LoginRequiredMixin, ListView):
+    employee_object = Employees()
+
+    def get_queryset(self):
+        return self.employee_object.get_filtered_result(self.request.GET)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter_data'] = self.employee_object.get_filter_popup_data()
+        return context
 
 class SearchEmployeeListView(LoginRequiredMixin, ListView):
     def get_queryset(self):

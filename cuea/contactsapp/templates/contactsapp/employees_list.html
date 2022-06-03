@@ -56,9 +56,11 @@
           </li>
         </form>
         </ul>
-        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas">
+        {% comment %} <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas">
           <span class="mdi mdi-menu"></span>
-        </button>
+        </button> {% endcomment %}
+
+        <button onclick="toggle_filters()" type="button" class="btn btn-outline-warning btn-fw" style="width: 25%;">Filters</button>
       </div>
     </nav>
     <!-- partial -->
@@ -315,7 +317,7 @@
         <div class="content-wrapper">
           <div class="row">
 
-            <div class="col-12 grid-margin stretch-card">
+            <div id="filter_div" style="display:none" class="col-12 grid-margin stretch-card">
               <div class="card">
                 <div class="row">
                   <div class="col-md-12">
@@ -324,11 +326,15 @@
                       <h5 class="card-title">{{category}}</h5>
                       <div class="template-demo" style="margin:2% 0">
                         {% for keywords in value %}
-                        <button type="button" class="btn btn-outline-danger btn-fw">{{ keywords }}</button>
+                        <button type="button" id="{{keywords}}_id" onclick="filter_click('{{category}}', '{{keywords}}')" class="btn btn-outline-danger btn-fw">{{ keywords }}</button>
                         {% endfor %}
                       </div>
                       <hr>
                       {% endfor %}
+                      <div class="text-center">
+                      <button type="button" onclick="apply_filter()" class="btn btn-primary btn-rounded btn-fw">Apply</button>
+                      <button type="button" onclick="clear_filter()" class="btn btn-secondary btn-rounded btn-fw">Clear</button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -421,6 +427,35 @@
   <script src="/static/js/template.js"></script>
   <script src="/static/js/settings.js"></script>
   <script src="/static/js/todolist.js"></script>
+  <script>
+    let url_modifier = window.location.hostname +':'+ window.location.port+'/filter-employees?'
+    console.log('>>>>>>>>>>>>>>',url_modifier)
+    function filter_click(category, filter_id){
+      const btn = document.getElementById(filter_id +'_id');
+      btn.style.backgroundColor = '#ec1a71';
+      btn.style.color = 'white';
+      url_modifier = url_modifier + category+'='+filter_id+'&'
+    }  
+    function apply_filter(){
+      console.log(url_modifier)
+      window.location.replace('http://'+url_modifier)
+
+    }
+
+    function clear_filter(){
+      let original_url = window.location.hostname +':'+ window.location.port+'/employees'
+      window.location.replace('http://'+original_url)
+    }
+
+    function toggle_filters(){
+      var filter_div = document.getElementById("filter_div");
+      if (filter_div.style.display === "none") {
+        filter_div.style.display = "block";
+      } else {
+        filter_div.style.display = "none";
+      }
+    }
+  </script
   <!-- endinject -->
   <!-- Custom js for this page-->
   <!-- End custom js for this page-->

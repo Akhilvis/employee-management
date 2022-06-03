@@ -32,7 +32,7 @@ class Employees(models.Model):
                 )
         return searched_employees
     
-    def get_filter_data(self):
+    def get_filter_popup_data(self):
         filter_data = {}
         filter_data = list(Employees.objects.values('sex', 'blood_group', 'employeeservice__designation', 'employeeservice__department', 'employeeservice__membership', 'employeevote__deshabhimani_sub').distinct())
         unique_keywords = {filtetkey: set() for filtetkey in ['sex', 'blood_group', 'employeeservice__designation', 'employeeservice__department', 'employeeservice__membership', 'employeevote__deshabhimani_sub']}
@@ -41,12 +41,17 @@ class Employees(models.Model):
             for key in data.keys():
                 unique_keywords[key].add(data[key])
         
-        print(unique_keywords)
         new_keys = {'sex':'Gender', 'blood_group':'Blood Group', 'employeeservice__designation':'Designation', 'employeeservice__department':'Department', 'employeeservice__membership': 'Membership', 'employeevote__deshabhimani_sub': 'Deshabhimani Subscription'}
         unique_keywords = dict((new_keys[key], value) for (key, value) in unique_keywords.items())
        
         return unique_keywords
-        
+    
+    def get_filtered_result(self, parameter_object):
+        new_keys = {'Gender': 'sex', 'Blood Group': 'blood_group', 'Designation':'employeeservice__designation', 'Department':'employeeservice__department', 'Membership': 'employeeservice__membership', 'Deshabhimani Subscription':'employeevote__deshabhimani_sub'}
+        query_dict = {new_keys[key]:value for key,value in parameter_object.items()}
+        print("....................  ", query_dict)
+        filtered_queryset = Employees.objects.select_related('employeeservice').select_related('employeevote').filter(**query_dict)
+        return filtered_queryset
 
     def __str__(self):
         return self.name 
