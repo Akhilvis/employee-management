@@ -496,23 +496,11 @@
             <div class="col-md-6 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Typeahead</h4>
-                  <p class="card-description">
-                    A simple suggestion engine
-                  </p>
-                  <div class="form-group row">
-                    <div class="col">
-                      <label>Basic</label>
-                      <div id="the-basics">
-                        <input class="typeahead" type="text" placeholder="States of USA">
-                      </div>
-                    </div>
-                    <div class="col">
-                      <label>Bloodhound</label>
-                      <div id="bloodhound">
-                        <input class="typeahead" type="text" placeholder="States of USA">
-                      </div>
-                    </div>
+                  <h4 class="card-title" style="padding-bottom: 5%">Download All Data</h4>
+                  <div class="text-center">
+                    <form method="get" action="/exportcsv">
+                    <button type="submit"  class="btn btn-social-icon-text btn-facebook"><i class="ti-upload"></i>Export</button>
+                    </form>
                   </div>
                 </div>
               </div>

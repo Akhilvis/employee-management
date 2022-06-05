@@ -59,8 +59,10 @@
         {% comment %} <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas">
           <span class="mdi mdi-menu"></span>
         </button> {% endcomment %}
-
-        <button onclick="toggle_filters()" type="button" class="btn btn-outline-warning btn-fw" style="width: 25%;">Filters</button>
+        <button type="button" onclick="toggle_filters()" class="btn btn-info btn-icon-text" style="display:flex;">
+          Filters
+          <i class="ti-filter btn-icon-append"></i>                                                                              
+        </button>
       </div>
     </nav>
     <!-- partial -->
@@ -344,7 +346,9 @@
             <div class="col-lg-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Employees Table</h4>
+                  <div>
+                    <button type="button" onclick="export_csv()" class="btn btn-social-icon-text btn-facebook"><i class="ti-upload"></i>Export</button>
+                  </div>
                   <div class="table-responsive">
                     <table class="table table-striped">
                       <thead>
@@ -455,6 +459,23 @@
         filter_div.style.display = "none";
       }
     }
+
+  
+    function export_csv(){
+
+      console.log(window.location.href)
+      urlString = window.location.href
+      let paramString = urlString.split('?')[1];
+      console.log(paramString)
+      if (paramString == undefined)
+      {
+        paramString = ''
+      }
+      let original_url = window.location.hostname +':'+ window.location.port+'/exportcsv?'
+      window.location.replace('http://'+original_url+paramString)
+      }
+      
+    
   </script
   <!-- endinject -->
   <!-- Custom js for this page-->

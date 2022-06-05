@@ -1,3 +1,4 @@
+import csv
 from urllib import request
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
@@ -6,7 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 
 from .utils import *
 from .forms import *
-from .csv import CSVReader
+from .csv import CSVProcess
 from .models import *
 
 from django.views.generic import ListView, TemplateView, View
@@ -41,12 +42,16 @@ class LogoutView(View):
 
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = "contactsapp/index.html"
+    employee_object = Employees()
 
-def index(request):
-    return render(request, 'contactsapp/index.html')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['dashboard_data'] = self.employee_object.get_dashboard_data()
+        return context
 
-def upload_csv(request):
-    return render(request, 'contactsapp/uploadcsv.html')
+class UploadCSView(LoginRequiredMixin, TemplateView):
+    template_name = "contactsapp/uploadcsv.html"
+
 
 def csv_process(request):
     csv_data = request.FILES['csv']
@@ -58,7 +63,7 @@ def csv_process(request):
         if form.is_valid():
             handle_uploaded_file(csv_data)
             success_message = 'Uploaded Successfuly'
-            csv_reader = CSVReader()
+            csv_reader = CSVProcess()
             csv_reader.feed_db()
     return render(request, 'contactsapp/uploadcsv.html', {'success_message': success_message})
 
@@ -91,3 +96,12 @@ class SearchEmployeeListView(LoginRequiredMixin, ListView):
         seach_key = self.request.GET.get('search_keyword')
         employee_object = Employees()
         return employee_object.get_searched_employee(seach_key)
+
+
+class ExportCSView(LoginRequiredMixin, View):
+    def get(self, request):
+        print('>>>>>>>>>>>>>.   ', self.request.GET)
+
+        csv_processor = CSVProcess()
+        return csv_processor.export_csv(self.request.GET)
+

@@ -1,7 +1,8 @@
 from enum import unique
+from functools import total_ordering
 from django.db import models
 from django.db.models import Q
-
+from django.db import connection
 
 class Employees(models.Model):
     pf_number = models.IntegerField()
@@ -9,7 +10,7 @@ class Employees(models.Model):
     sex = models.CharField(max_length=30, default="M")
     blood_group = models.CharField(max_length=10)
     mobile = models.CharField(max_length=20)
-    adddress = models.TextField()
+    address = models.TextField()
     district = models.CharField(max_length=20)
     pan_mun_cop = models.CharField(max_length=20)
     pin_code = models.CharField(max_length=20)
@@ -18,7 +19,7 @@ class Employees(models.Model):
         return Employees.objects.filter(pf_number = pf_num).exists()
     
     def get_all_employees(self):
-        return Employees.objects.select_related('employeeservice').select_related('employeevote').all()
+        return Employees.objects.select_related('employeeservice').select_related('employeevote').defer('address')
 
     def get_searched_employee(self, seach_key):
         searched_employees = Employees.objects.select_related('employeeservice').select_related('employeevote').filter(
@@ -29,13 +30,13 @@ class Employees(models.Model):
                     Q(employeevote__legislative_assembly__icontains=seach_key) | Q(employeevote__loksabha_constituency__icontains=seach_key)|
                     Q(employeevote__deshabhimani_sub__icontains=seach_key)|  Q(mobile__icontains=seach_key)
 
-                )
+                ).defer('address')
         return searched_employees
     
     def get_filter_popup_data(self):
         filter_data = {}
         filter_data = list(Employees.objects.values('sex', 'blood_group', 'employeeservice__designation', 'employeeservice__department', 'employeeservice__membership', 'employeevote__deshabhimani_sub').distinct())
-        unique_keywords = {filtetkey: set() for filtetkey in ['sex', 'blood_group', 'employeeservice__designation', 'employeeservice__department', 'employeeservice__membership', 'employeevote__deshabhimani_sub']}
+        unique_keywords = {filtertkey: set() for filtertkey in ['sex', 'blood_group', 'employeeservice__designation', 'employeeservice__department', 'employeeservice__membership', 'employeevote__deshabhimani_sub']}
 
         for data in filter_data:
             for key in data.keys():
@@ -49,12 +50,27 @@ class Employees(models.Model):
     def get_filtered_result(self, parameter_object):
         new_keys = {'Gender': 'sex', 'Blood Group': 'blood_group', 'Designation':'employeeservice__designation', 'Department':'employeeservice__department', 'Membership': 'employeeservice__membership', 'Deshabhimani Subscription':'employeevote__deshabhimani_sub'}
         query_dict = {new_keys[key]:value for key,value in parameter_object.items()}
-        print("....................  ", query_dict)
         filtered_queryset = Employees.objects.select_related('employeeservice').select_related('employeevote').filter(**query_dict)
         return filtered_queryset
 
+    def get_dashboard_data(self):
+        total_employees = Employees.objects.count()
+        association_members_count =  EmployeeService.dashboard.association_mem_count()
+        print(8888888888, association_members_count)
+        print(len(connection.queries))
+    
     def __str__(self):
         return self.name 
+
+
+
+
+
+
+class DashboardManager(models.Manager):
+    def association_mem_count(self):
+        return self.filter(membership='Association').count()
+
 
 
 class EmployeeService(models.Model):
@@ -72,8 +88,10 @@ class EmployeeService(models.Model):
                     max_length = 30,
                     choices = MEMBERSHIP_CHOICES,
                     default = 'Neuatral'
-                    )
+    )
+    dashboard = DashboardManager()
     
+
     def __str__(self):
         return '{} - Service'.format(self.employee) 
 
@@ -87,3 +105,4 @@ class EmployeeVote(models.Model):
 
     def __str__(self):
         return '{} - Vote'.format(self.employee) 
+    

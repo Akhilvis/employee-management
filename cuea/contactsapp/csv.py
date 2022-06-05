@@ -1,7 +1,10 @@
+import csv
 import pandas as pd
+from django.http import HttpResponse
+
 from .models import *
 
-class CSVReader:
+class CSVProcess:
     
     def __init__(self):
         self.csv_file = 'employee_csv.csv'
@@ -41,6 +44,27 @@ class CSVReader:
             employee_vote.subscription_amount = emp.Yearlysubscription
             employee_vote.save()
 
+
+    def export_csv(self, url_params):
+        output = []
+        response = HttpResponse (content_type='text/csv')
+        writer = csv.writer(response)
+        employee = Employees()
+        employee.get_filtered_result(url_params)
+        query_set = employee.get_filtered_result(url_params)
+    
+        #Header
+        writer.writerow(['Sl No.', 'PFNo', 'Name', 'Sex', 'Designation', 'Dept', 'Blood', 'DoE', 'DoR', 'Membership', 'Mob', 'email', 
+        'Address', 'District', 'PinCode', 'VotersId', 'Pan_Mun_Cor', 'LegislativeAssembly', 'LokSabhaConstituency', 'other Religious/ political/ social orgnanisations', 'Deshabimanisubscription'
+        , 'Yearlysubscription'])
+        for num, emp in enumerate(query_set, start=1):
+            output.append([num, emp.pf_number, emp.name, emp.sex, emp.employeeservice.designation, emp.employeeservice.department, emp.blood_group, '', '', emp.employeeservice.membership,
+            emp.mobile, 'email', emp.address, emp.district, emp.pin_code, emp.employeevote.voters_id, 
+            emp.pan_mun_cop, emp.employeevote.legislative_assembly, emp.employeevote.loksabha_constituency
+            , '', emp.employeevote.deshabhimani_sub, emp.employeevote.subscription_amount])
+        #CSV Data
+        writer.writerows(output)
+        return response
 
 
 
