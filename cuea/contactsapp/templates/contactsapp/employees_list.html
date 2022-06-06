@@ -49,7 +49,7 @@
           </li>
         </ul>
         <ul class="navbar-nav ms-auto" style="width: 80%;">
-          <form action="search-employee" method="get">
+          <form action="search-employee" method="get" style="width:80%;">
           <li class="nav-item" style="display: inline-flex;width: 100%;">
             <input class="form-control" type="text" name="search_keyword" placeholder="Search Name,Gender,Designation etc..." aria-label="Search" style="height: 1%;">
             <button type="submit" class="btn btn-success" style="width: 25%;">Seach</button>
@@ -222,7 +222,7 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" href="../../index.html">
+            <a class="nav-link" href="/dashboard">
               <i class="mdi mdi-grid-large menu-icon"></i>
               <span class="menu-title">Dashboard</span>
             </a>
@@ -268,16 +268,16 @@
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
+            <a class="nav-link" href="/employees">
               <i class="menu-icon mdi mdi-table"></i>
-              <span class="menu-title">Tables</span>
-              <i class="menu-arrow"></i>
+              <span class="menu-title">Employees</span>
             </a>
-            <div class="collapse" id="tables">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="../../pages/tables/basic-table.html">Basic table</a></li>
-              </ul>
-            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/upload-csv">
+              <i class="menu-icon mdi mdi-cloud-upload"></i>
+              <span class="menu-title">Export/Import Excel</span>
+            </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">

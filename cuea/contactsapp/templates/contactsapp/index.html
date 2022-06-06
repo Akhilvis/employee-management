@@ -375,7 +375,7 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="/dashboard">
               <i class="mdi mdi-grid-large menu-icon"></i>
               <span class="menu-title">Dashboard</span>
             </a>
@@ -477,34 +477,36 @@
                     <div class="row">
                       <div class="col-sm-12">
                         <div class="statistics-details d-flex align-items-center justify-content-between">
-                          <div>
+                          <div style="margin-bottom: 3%;">
                             <p class="statistics-title">Total employees</p>
-                            <h3 class="rate-percentage">32.53%</h3>
+                            <h3 class="rate-percentage">{{ dashboard_data.total_employees }}</h3>
                           </div>
                           <div>
                             <p class="statistics-title">Association</p>
-                            <h3 class="rate-percentage">7,682</h3>
-                            <p class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>+0.1%</span></p>
+                            <h3 class="rate-percentage">{{ dashboard_data.association_members_count }}</h3>
+                            <p class="text-success d-flex"><i class="mdi mdi-menu-up">
+                              
+                            </i><span>{% widthratio dashboard_data.association_members_count dashboard_data.total_employees 100 %} %</span></p>
                           </div>
                           <div>
                             <p class="statistics-title">Union</p>
-                            <h3 class="rate-percentage">68.8</h3>
-                            <p class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>68.8</span></p>
+                            <h3 class="rate-percentage">{{ dashboard_data.union_members_count }}</h3>
+                            <p class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>{% widthratio dashboard_data.union_members_count dashboard_data.total_employees 100 %} %</span></p>
                           </div>
                           <div class="d-none d-md-block">
                             <p class="statistics-title">No Membership</p>
-                            <h3 class="rate-percentage">2m:35s</h3>
-                            <p class="text-success d-flex"><i class="mdi mdi-menu-down"></i><span>+0.8%</span></p>
+                            <h3 class="rate-percentage">{{ dashboard_data.no_membership_count }}</h3>
+                            <p class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>{% widthratio dashboard_data.no_membership_count dashboard_data.total_employees 100 %} %</span></p>
                           </div>
                           <div class="d-none d-md-block">
                             <p class="statistics-title">Deshabhimani Sub</p>
-                            <h3 class="rate-percentage">68.8</h3>
-                            <p class="text-danger d-flex"><i class="mdi mdi-menu-down"></i><span>68.8</span></p>
+                            <h3 class="rate-percentage">{{ dashboard_data.deshabhimani_mem_count }}</h3>
+                            <p class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>{% widthratio dashboard_data.deshabhimani_mem_count dashboard_data.total_employees 100 %} %</span></p>
                           </div>
-                          <div class="d-none d-md-block">
+                          <div class="d-none d-md-block"  style="margin-bottom: 3%;">
                             <p class="statistics-title">Sub Amount</p>
-                            <h3 class="rate-percentage">2m:35s</h3>
-                            <p class="text-success d-flex"><i class="mdi mdi-menu-down"></i><span>+0.8%</span></p>
+                            <h3 class="rate-percentage">&#8377; {{ dashboard_data.deshabhimani_sub_amount }}</h3>
+                            <p class="text-success d-flex"></p>
                           </div>
                         </div>
                       </div>
@@ -512,10 +514,48 @@
                   
                     <div class="row">
                       <div class="col-lg-8 d-flex flex-column">
-                      
+                        <div class="row flex-grow">
+                          <div class="col-12 grid-margin stretch-card">
+                            <div class="card card-rounded">
+                              <div class="card-body">
+                                <div class="row">
+                                  <div class="col-lg-12">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                      <h4 class="card-title card-title-dash">Retirement Dues</h4>
+                                      <div class="add-items d-flex mb-0">
+                                        <!-- <input type="text" class="form-control todo-list-input" placeholder="What do you need to do today?"> -->
+                                      </div>
+                                    </div>
+                                    <div class="list-wrapper">
+                                      <ul class="todo-list todo-list-rounded">
+                                        {% for emp in dashboard_data.retire_due_employees %}
+                                        <li class="d-block">
+                                          <div class="form-check w-100">
+                                            <label class="form-check-label">
+                                              <p> <strong>{{ emp.employee.name }}</strong> - <span class="text-primary">{{ emp.designation}}</span> -  <span class="text-danger">{{ emp.department }}</span>
+                                                <span class="badge badge-opacity-warning me-3" style="margin: 0 3%;">Due {{ emp.date_of_retire }}</span>
+                                                <button type="button" class="btn btn-warning btn-rounded btn-fw" style="margin:0">Retired</button>
+                                                <i class="mdi mdi-flag ms-2 flag-color"></i>
+                                              </p>
+                                              <i class="input-helper rounded"></i>
+
+                                            </label>
+                                  
+                                          </div>
+                                        </li>
+                                        {% endfor %}
+                                        
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                         <div class="row flex-grow">
                           
-                          <div class="col-md-6 col-lg-6 grid-margin stretch-card">
+                          <div class="col-md-12 col-lg-12 grid-margin stretch-card">
                             <div class="card card-rounded">
                               <div class="card-body">
                                 <div class="d-flex align-items-center justify-content-between mb-3">
@@ -579,74 +619,7 @@
                         </div>
                       </div>
                       <div class="col-lg-4 d-flex flex-column">
-                        <div class="row flex-grow">
-                          <div class="col-12 grid-margin stretch-card">
-                            <div class="card card-rounded">
-                              <div class="card-body">
-                                <div class="row">
-                                  <div class="col-lg-12">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                      <h4 class="card-title card-title-dash">Todo list</h4>
-                                      <div class="add-items d-flex mb-0">
-                                        <!-- <input type="text" class="form-control todo-list-input" placeholder="What do you need to do today?"> -->
-                                        <button class="add btn btn-icons btn-rounded btn-primary todo-list-add-btn text-white me-0 pl-12p"><i class="mdi mdi-plus"></i></button>
-                                      </div>
-                                    </div>
-                                    <div class="list-wrapper">
-                                      <ul class="todo-list todo-list-rounded">
-                                        <li class="d-block">
-                                          <div class="form-check w-100">
-                                            <label class="form-check-label">
-                                              <input class="checkbox" type="checkbox"> Lorem Ipsum is simply dummy text of the printing <i class="input-helper rounded"></i>
-                                            </label>
-                                            <div class="d-flex mt-2">
-                                              <div class="ps-4 text-small me-3">24 June 2020</div>
-                                              <div class="badge badge-opacity-warning me-3">Due tomorrow</div>
-                                              <i class="mdi mdi-flag ms-2 flag-color"></i>
-                                            </div>
-                                          </div>
-                                        </li>
-                                        <li class="d-block">
-                                          <div class="form-check w-100">
-                                            <label class="form-check-label">
-                                              <input class="checkbox" type="checkbox"> Lorem Ipsum is simply dummy text of the printing <i class="input-helper rounded"></i>
-                                            </label>
-                                            <div class="d-flex mt-2">
-                                              <div class="ps-4 text-small me-3">23 June 2020</div>
-                                              <div class="badge badge-opacity-success me-3">Done</div>
-                                            </div>
-                                          </div>
-                                        </li>
-                                        <li>
-                                          <div class="form-check w-100">
-                                            <label class="form-check-label">
-                                              <input class="checkbox" type="checkbox"> Lorem Ipsum is simply dummy text of the printing <i class="input-helper rounded"></i>
-                                            </label>
-                                            <div class="d-flex mt-2">
-                                              <div class="ps-4 text-small me-3">24 June 2020</div>
-                                              <div class="badge badge-opacity-success me-3">Done</div>
-                                            </div>
-                                          </div>
-                                        </li>
-                                        <li class="border-bottom-0">
-                                          <div class="form-check w-100">
-                                            <label class="form-check-label">
-                                              <input class="checkbox" type="checkbox"> Lorem Ipsum is simply dummy text of the printing <i class="input-helper rounded"></i>
-                                            </label>
-                                            <div class="d-flex mt-2">
-                                              <div class="ps-4 text-small me-3">24 June 2020</div>
-                                              <div class="badge badge-opacity-danger me-3">Expired</div>
-                                            </div>
-                                          </div>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+              
                         <div class="row flex-grow">
                           <div class="col-12 grid-margin stretch-card">
                             <div class="card card-rounded">

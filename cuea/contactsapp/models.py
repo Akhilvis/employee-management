@@ -4,6 +4,8 @@ from django.db import models
 from django.db.models import Q
 from django.db import connection
 
+from .managers import *
+
 class Employees(models.Model):
     pf_number = models.IntegerField()
     name = models.CharField(max_length=50)
@@ -54,23 +56,21 @@ class Employees(models.Model):
         return filtered_queryset
 
     def get_dashboard_data(self):
-        total_employees = Employees.objects.count()
-        association_members_count =  EmployeeService.dashboard.association_mem_count()
-        print(8888888888, association_members_count)
-        print(len(connection.queries))
+        dashboard_data = {}
+        dashboard_data['total_employees'] = Employees.objects.count()
+        dashboard_data['association_members_count'] =  EmployeeService.dashboard.association_mem_count()
+        dashboard_data['union_members_count'] =  EmployeeService.dashboard.union_mem_count()
+        dashboard_data['no_membership_count'] =  EmployeeService.dashboard.no_membership_count()
+        dashboard_data['deshabhimani_mem_count'] = EmployeeVote.dashboard.deshabhimani_mem_count()
+        dashboard_data['deshabhimani_sub_amount'] = EmployeeVote.dashboard.deshabhimani_sub_amount()
+
+        #retirement dues
+        dashboard_data['retire_due_employees'] = EmployeeService.dashboard.mark_retirement()
+
+        return dashboard_data
     
     def __str__(self):
         return self.name 
-
-
-
-
-
-
-class DashboardManager(models.Manager):
-    def association_mem_count(self):
-        return self.filter(membership='Association').count()
-
 
 
 class EmployeeService(models.Model):
@@ -89,6 +89,9 @@ class EmployeeService(models.Model):
                     choices = MEMBERSHIP_CHOICES,
                     default = 'Neuatral'
     )
+    date_of_entry = models.DateField(null=True)
+    date_of_retire = models.DateField(null=True)
+    is_retired =  models.BooleanField(default=False)
     dashboard = DashboardManager()
     
 
@@ -105,4 +108,7 @@ class EmployeeVote(models.Model):
 
     def __str__(self):
         return '{} - Vote'.format(self.employee) 
+    
+    dashboard = VoteManager()
+
     

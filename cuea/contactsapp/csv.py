@@ -1,4 +1,5 @@
 import csv
+import datetime
 import pandas as pd
 from django.http import HttpResponse
 
@@ -11,7 +12,6 @@ class CSVProcess:
     
     def feed_db(self):
         df = pd.read_csv(self.csv_file)
-        print(df.head())
         for i, emp in df.iterrows():
             print(i,emp)
             employee = Employees()
@@ -33,6 +33,8 @@ class CSVProcess:
             employee_service.designation = emp.Designation
             employee_service.department = emp.Dept
             employee_service.membership = emp.Membership
+            employee_service.date_of_entry = self.date_parsing(emp.DoE)
+            employee_service.date_of_retire = self.date_parsing(emp.DoR)
             employee_service.save()
 
             employee_vote = EmployeeVote()
@@ -44,6 +46,9 @@ class CSVProcess:
             employee_vote.subscription_amount = emp.Yearlysubscription
             employee_vote.save()
 
+    def date_parsing(self, date_string):
+        date, month, year = date_string.split("-")
+        return datetime.date(int(year), int(month), int(date))
 
     def export_csv(self, url_params):
         output = []
