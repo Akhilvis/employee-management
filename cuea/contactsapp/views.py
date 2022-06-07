@@ -80,6 +80,19 @@ class EmployeesListView(LoginRequiredMixin, ListView):
         context['filter_data'] = self.employee_object.get_filter_popup_data()
         return context
 
+class RetiredEmployeesListView(LoginRequiredMixin, ListView):
+    paginate_by = 20
+    employee_object = Employees()
+
+    def get_queryset(self, *args, **kwargs):
+        url_params = self.request.GET
+        return self.employee_object.get_all_employees(True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter_data'] = self.employee_object.get_filter_popup_data()
+        return context
+
 class FilterEmployeeListView(LoginRequiredMixin, ListView):
     employee_object = Employees()
 

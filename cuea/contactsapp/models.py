@@ -20,8 +20,8 @@ class Employees(models.Model):
     def is_old_employee(self, pf_num):
         return Employees.objects.filter(pf_number = pf_num).exists()
     
-    def get_all_employees(self):
-        return Employees.objects.select_related('employeeservice').select_related('employeevote').filter(employeeservice__is_retired=False).defer('address')
+    def get_all_employees(self, is_retired=False):
+        return Employees.objects.select_related('employeeservice').select_related('employeevote').filter(employeeservice__is_retired=is_retired).defer('address')
 
     def get_searched_employee(self, seach_key):
         searched_employees = Employees.objects.select_related('employeeservice').select_related('employeevote').filter(Q(employeeservice__is_retired=False)&
