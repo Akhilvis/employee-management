@@ -81,12 +81,12 @@ class EmployeesListView(LoginRequiredMixin, ListView):
         return context
 
 class RetiredEmployeesListView(LoginRequiredMixin, ListView):
-    paginate_by = 20
+    template_name = 'contactsapp/retired_list.html'
     employee_object = Employees()
 
     def get_queryset(self, *args, **kwargs):
         url_params = self.request.GET
-        return self.employee_object.get_all_employees(True)
+        return self.employee_object.get_all_employees(is_retired=True)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
