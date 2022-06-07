@@ -21,12 +21,12 @@ class Employees(models.Model):
         return Employees.objects.filter(pf_number = pf_num).exists()
     
     def get_all_employees(self):
-        return Employees.objects.select_related('employeeservice').select_related('employeevote').defer('address')
+        return Employees.objects.select_related('employeeservice').select_related('employeevote').filter(employeeservice__is_retired=False).defer('address')
 
     def get_searched_employee(self, seach_key):
-        searched_employees = Employees.objects.select_related('employeeservice').select_related('employeevote').filter(
+        searched_employees = Employees.objects.select_related('employeeservice').select_related('employeevote').filter(Q(employeeservice__is_retired=False)&
                     Q(name__icontains=seach_key) | Q(sex__icontains=seach_key) | Q(employeeservice__designation__icontains=seach_key)
-                    | Q(blood_group__icontains=seach_key) | Q(adddress__icontains=seach_key)|
+                    | Q(blood_group__icontains=seach_key) | Q(address__icontains=seach_key)|
                     Q(district__icontains=seach_key) | Q(pan_mun_cop__icontains=seach_key)|
                     Q(employeeservice__department__icontains=seach_key) | Q(employeeservice__membership__icontains=seach_key)|
                     Q(employeevote__legislative_assembly__icontains=seach_key) | Q(employeevote__loksabha_constituency__icontains=seach_key)|
@@ -52,6 +52,7 @@ class Employees(models.Model):
     def get_filtered_result(self, parameter_object):
         new_keys = {'Gender': 'sex', 'Blood Group': 'blood_group', 'Designation':'employeeservice__designation', 'Department':'employeeservice__department', 'Membership': 'employeeservice__membership', 'Deshabhimani Subscription':'employeevote__deshabhimani_sub'}
         query_dict = {new_keys[key]:value for key,value in parameter_object.items()}
+        query_dict['employeeservice__is_retired'] = False
         filtered_queryset = Employees.objects.select_related('employeeservice').select_related('employeevote').filter(**query_dict)
         return filtered_queryset
 
@@ -66,6 +67,12 @@ class Employees(models.Model):
 
         #retirement dues
         dashboard_data['retire_due_employees'] = EmployeeService.dashboard.mark_retirement()
+
+        print(">>>>>>>>>>>>>>>>>>>>   ", dashboard_data['retire_due_employees'])
+
+        dashboard_data['activities'] = Activities.get_activities()
+
+        print(dashboard_data['activities'])
 
         return dashboard_data
     
@@ -110,5 +117,18 @@ class EmployeeVote(models.Model):
         return '{} - Vote'.format(self.employee) 
     
     dashboard = VoteManager()
+
+class Activities(models.Model):
+    activity = models.CharField(max_length=100)
+    datetime = models.DateTimeField(auto_now=True)
+
+
+    @classmethod
+    def mark_activity(cls, activity_string):
+        cls.objects.create(activity = activity_string)
+    
+    @classmethod
+    def get_activities(cls):
+        return cls.objects.values('activity', 'datetime')
 
     

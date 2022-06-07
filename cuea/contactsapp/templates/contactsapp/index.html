@@ -521,7 +521,7 @@
                                 <div class="row">
                                   <div class="col-lg-12">
                                     <div class="d-flex justify-content-between align-items-center">
-                                      <h4 class="card-title card-title-dash">Retirement Dues</h4>
+                                      <h4 class="card-title card-title-dash">Recent Retirements</h4>
                                       <div class="add-items d-flex mb-0">
                                         <!-- <input type="text" class="form-control todo-list-input" placeholder="What do you need to do today?"> -->
                                       </div>
@@ -560,59 +560,19 @@
                               <div class="card-body">
                                 <div class="d-flex align-items-center justify-content-between mb-3">
                                   <h4 class="card-title card-title-dash">Activities</h4>
-                                  <p class="mb-0">20 finished, 5 remaining</p>
                                 </div>
                                 <ul class="bullet-line-list">
+                                  {% for activity in dashboard_data.activities %}
                                   <li>
                                     <div class="d-flex justify-content-between">
-                                      <div><span class="text-light-green">Ben Tossell</span> assign you a task</div>
-                                      <p>Just now</p>
+                                      <div><span class="text-light-green">{{activity.activity}}</span> </div>
+                                      <p>{{activity.datetime}}</p>
                                     </div>
                                   </li>
-                                  <li>
-                                    <div class="d-flex justify-content-between">
-                                      <div><span class="text-light-green">Oliver Noah</span> assign you a task</div>
-                                      <p>1h</p>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div class="d-flex justify-content-between">
-                                      <div><span class="text-light-green">Jack William</span> assign you a task</div>
-                                      <p>1h</p>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div class="d-flex justify-content-between">
-                                      <div><span class="text-light-green">Leo Lucas</span> assign you a task</div>
-                                      <p>1h</p>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div class="d-flex justify-content-between">
-                                      <div><span class="text-light-green">Thomas Henry</span> assign you a task</div>
-                                      <p>1h</p>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div class="d-flex justify-content-between">
-                                      <div><span class="text-light-green">Ben Tossell</span> assign you a task</div>
-                                      <p>1h</p>
-                                    </div>
-                                  </li>
-                                  <li>
-                                    <div class="d-flex justify-content-between">
-                                      <div><span class="text-light-green">Ben Tossell</span> assign you a task</div>
-                                      <p>1h</p>
-                                    </div>
-                                  </li>
+                                  {% endfor %}
+                                
                                 </ul>
-                                <div class="list align-items-center pt-3">
-                                  <div class="wrapper w-100">
-                                    <p class="mb-0">
-                                      <a href="#" class="fw-bold text-primary">Show all <i class="mdi mdi-arrow-right ms-2"></i></a>
-                                    </p>
-                                  </div>
-                                </div>
+                                
                               </div>
                             </div>
                           </div>
