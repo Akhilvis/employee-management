@@ -1,9 +1,9 @@
 Sl No.,PFNo,Name,Sex,Designation,Dept,Blood,DoE,DoR,Membership,Mob,email,Address,District,PinCode,VotersId,Pan_Mun_Cor,LegislativeAssembly,LokSabhaConstituency,other Religious/ political/ social orgnanisations,Deshabimanisubscription,Yearlysubscription,"Photo
 (optional)"
-1,1111,Arya B L,F,ASO,Library,O+,18-01-2021,31-05-2049,Association,7559977988,ab@gmail.com,"Chungamtham H, Thuravoor P O, Cherthala, Alapuzha",Alapuzha,688532,XJ135465N,Pallipuram,Thuravoor,Alapuzha,SNDP,No,150,
-2,1112,Susheel Kumar ,M,Assistant,Library,AB-,10-01-2020,30-04-2045,Association,9845098450,sk@gmail.com,"P V house, Mootampram, Madayi P O",Kannur,670304,AB123456C,Madayi,Irikoor,Kannur,NSS,Yes,Not paid,
-3,1115,Jomol Abraham,F,SO,IRAA,O+,01-01-2011,31-01-2030,Union,9847098470,ja@yahoo.com,"Moolakalam H, Pulikuttissery P O, ",Kottayam,686015,CB123466A,Adichira,Vaikom,Kottayam,NA,No,NA,
-4,1116,Alwin Vincent,M,SO(T),CASH,O+,30-05-2010,30-11-2021,Association,9867598654,aw@cusat.ac.in,"Chittattukara H, Mundoor P O",Thrissur,680541,DK358933D,Mundoor,Kunnamkulam,Thrissur,CYO,Yes,150,
-5,1117,Anoop E S,M,OA,Finance,,14-07-2018,31-05-2025,Union,9678593458,an12@yaho.com,"Erumappullil H, Kulayattikara P O, kanjiramattom",Ernakulam,682317,FD978522A,Kanjiramattom,Thripunithura,Kunnathunad,NA,No,NA,
-6,1117,Aparna,M,OA,Finance,,14-07-2018,31-05-2025,Neutral,9678593458,an12@yaho.com,"Erumappullil H, Kulayattikara P O, kanjiramattom",Ernakulam,682317,FD978522A,Kanjiramattom,Thripunithura,Kunnathunad,NA,No,NA,
-7,1117,Archana,M,OA,Finance,,14-07-2018,31-05-2020,Neutral,9678593458,an12@yaho.com,"Erumappullil H, Kulayattikara P O, kanjiramattom",Ernakulam,682317,FD978522A,Kanjiramattom,Thripunithura,Kunnathunad,NA,No,NA,
+1,1111,Arya B L,F,ASO,PAYROLL A,O+,18-01-2021,31-05-2049,Association,7559977988,ab@gmail.com,"Chungamtham H, Thuravoor P O, Cherthala, Alapuzha",Alapuzha,688532,XJ135465N,Pallipuram,Thuravoor,Alapuzha,SNDP,No,150,
+2,1112,Susheel Kumar ,M,Assistant,KMSME,AB-,10-01-2020,30-04-2045,Association,9845098450,sk@gmail.com,"P V house, Mootampram, Madayi P O",Kannur,670304,AB123456C,Madayi,Irikoor,Kannur,NSS,Yes,Not paid,
+3,1115,Jomol Abraham,F,SO,EXAM V,O+,01-01-2011,31-01-2030,Union,9847098470,ja@yahoo.com,"Moolakalam H, Pulikuttissery P O, ",Kottayam,686015,CB123466A,Adichira,Vaikom,Kottayam,NA,No,NA,
+4,1116,Alwin Vincent,M,SO(T),EXAM V,O+,30-05-2010,30-06-2022,Association,9867598654,aw@cusat.ac.in,"Chittattukara H, Mundoor P O",Thrissur,680541,DK358933D,Mundoor,Kunnamkulam,Thrissur,CYO,Yes,150,
+5,1117,Anoop E S,M,OA,DEPT. OF PHYSICS,,14-07-2018,31-05-2025,Union,9678593458,an12@yaho.com,"Erumappullil H, Kulayattikara P O, kanjiramattom",Ernakulam,682317,FD978522A,Kanjiramattom,Thripunithura,Kunnathunad,NA,No,NA,
+6,1117,Aparna,M,OA,PHYSICAL OCEANOGRAPHY,,14-07-2018,31-05-2025,Neutral,9678593458,an12@yaho.com,"Erumappullil H, Kulayattikara P O, kanjiramattom",Ernakulam,682317,FD978522A,Kanjiramattom,Thripunithura,Kunnathunad,NA,No,NA,
+7,1117,Archana,M,OA,ADMN. B,,14-07-2018,31-05-2020,Neutral,9678593458,an12@yaho.com,"Erumappullil H, Kulayattikara P O, kanjiramattom",Ernakulam,682317,FD978522A,Kanjiramattom,Thripunithura,Kunnathunad,NA,No,NA,

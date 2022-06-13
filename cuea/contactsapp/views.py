@@ -20,6 +20,14 @@ class LoginView(View):
     template_name = "contactsapp/login.html"
     
     def get(self, request):
+        sections_set = set()
+        f = open("sections_list.txt", "r")
+        for line in f.readlines():
+            sections_set.add(line.strip())
+        for section in sections_set:
+            unit = Unit.objects.first()
+            Section.objects.create(section=section, unit=unit)
+        
         return render(request, self.template_name)
         
     def post(self, request):
@@ -49,23 +57,25 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['dashboard_data'] = self.employee_object.get_dashboard_data()
         return context
 
-class UploadCSView(LoginRequiredMixin, TemplateView):
-    template_name = "contactsapp/uploadcsv.html"
+class UploadCSView(LoginRequiredMixin, View):
 
-
-def csv_process(request):
-    csv_data = request.FILES['csv']
-    if csv_data.name.split('.')[-1] != 'csv':
-        upload_error = 'Invalid File Type'
-        return render(request, 'uploadcsv.html', {'upload_error': upload_error})
-    if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            handle_uploaded_file(csv_data)
-            success_message = 'Uploaded Successfuly'
-            csv_reader = CSVProcess()
-            csv_reader.feed_db()
-    return render(request, 'contactsapp/uploadcsv.html', {'success_message': success_message})
+        template_name = "contactsapp/uploadcsv.html"
+        def get(self, request):
+            return render(request, self.template_name)
+        
+        def post(self, request):
+            csv_data = request.FILES['csv']
+            if csv_data.name.split('.')[-1] != 'csv':
+                upload_error = 'Invalid File Type'
+                return render(request, self.template_name, {'upload_error': upload_error})
+            if request.method == 'POST':
+                form = UploadFileForm(request.POST, request.FILES)
+                if form.is_valid():
+                    handle_uploaded_file(csv_data)
+                    success_message = 'Uploaded Successfuly'
+                    csv_reader = CSVProcess()
+                    csv_reader.feed_db()
+            return render(request, self.template_name, {'success_message': success_message})
 
 class EmployeesListView(LoginRequiredMixin, ListView):
     paginate_by = 20
@@ -113,8 +123,20 @@ class SearchEmployeeListView(LoginRequiredMixin, ListView):
 
 class ExportCSView(LoginRequiredMixin, View):
     def get(self, request):
-        print('>>>>>>>>>>>>>.   ', self.request.GET)
-
         csv_processor = CSVProcess()
         return csv_processor.export_csv(self.request.GET)
+
+
+class TransferListView(LoginRequiredMixin, View):
+    template_name = "contactsapp/transfer.html"
+    sections = Section()
+    context = {}
+    
+    def get(self, request):
+        self.context['sections'] = self.sections.get_all_sections()
+        return render(request, self.template_name, self.context)
+    
+    def post(self, request):
+        print(request.POST)
+
 

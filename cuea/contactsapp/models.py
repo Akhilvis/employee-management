@@ -6,6 +6,24 @@ from django.db import connection
 
 from .managers import *
 
+
+class Unit(models.Model):
+    unit = models.IntegerField()
+
+    def __str__(self):
+        return '{unit}'.format(unit=self.unit) 
+
+class Section(models.Model):
+    section = models.CharField(max_length=50)
+    unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
+
+    def get_all_sections(self):
+        return Section.objects.all()
+
+    def __str__(self):
+        return '{section} - {unit}'.format(section=self.section, unit=self.unit) 
+
+
 class Employees(models.Model):
     pf_number = models.IntegerField()
     name = models.CharField(max_length=50)
@@ -68,8 +86,10 @@ class Employees(models.Model):
         #retirement dues
         dashboard_data['retire_due_employees'] = EmployeeService.dashboard.mark_retirement()
 
-        print(">>>>>>>>>>>>>>>>>>>>   ", dashboard_data['retire_due_employees'])
+        #upcomig retirement
+        dashboard_data['upcoming_retirements'] = EmployeeService.dashboard.upcoming_retirements()
 
+ 
         dashboard_data['activities'] = Activities.get_activities()
 
         print(dashboard_data['activities'])
@@ -90,7 +110,8 @@ class EmployeeService(models.Model):
 
     employee = models.OneToOneField(Employees, on_delete=models.CASCADE, primary_key=True,)
     designation = models.CharField(max_length=50)
-    department = models.CharField(max_length=50)
+    department = models.CharField(max_length=50, default=1)
+    # unit = models.CharField(max_length=50)
     membership = models.CharField(
                     max_length = 30,
                     choices = MEMBERSHIP_CHOICES,
@@ -99,6 +120,8 @@ class EmployeeService(models.Model):
     date_of_entry = models.DateField(null=True)
     date_of_retire = models.DateField(null=True)
     is_retired =  models.BooleanField(default=False)
+
+    objects = models.Manager()
     dashboard = DashboardManager()
     
 

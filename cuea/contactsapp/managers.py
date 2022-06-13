@@ -1,5 +1,4 @@
 import datetime
-from unicodedata import name
 from django.db import models
 
 import contactsapp.models
@@ -22,6 +21,10 @@ class DashboardManager(models.Manager):
         retire_employees_queyset.update(is_retired=True)
        
         return self.filter(is_retired=True).order_by('-date_of_retire')
+    
+    def upcoming_retirements(self):
+        retirement_threshold = datetime.timedelta(days = 32) + datetime.datetime.now()                        
+        return self.filter(date_of_retire__lte=retirement_threshold, date_of_retire__gt=datetime.datetime.now())
 
 
 class VoteManager(models.Manager):
