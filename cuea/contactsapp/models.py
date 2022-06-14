@@ -92,8 +92,6 @@ class Employees(models.Model):
  
         dashboard_data['activities'] = Activities.get_activities()
 
-        print(dashboard_data['activities'])
-
         return dashboard_data
     
     def __str__(self):
@@ -110,8 +108,7 @@ class EmployeeService(models.Model):
 
     employee = models.OneToOneField(Employees, on_delete=models.CASCADE, primary_key=True,)
     designation = models.CharField(max_length=50)
-    department = models.CharField(max_length=50, default=1)
-    # unit = models.CharField(max_length=50)
+    department = models.ForeignKey(Section, null=True, on_delete=models.SET_NULL)
     membership = models.CharField(
                     max_length = 30,
                     choices = MEMBERSHIP_CHOICES,
@@ -120,13 +117,14 @@ class EmployeeService(models.Model):
     date_of_entry = models.DateField(null=True)
     date_of_retire = models.DateField(null=True)
     is_retired =  models.BooleanField(default=False)
+    exit_remark = models.CharField(max_length=50)
 
     objects = models.Manager()
     dashboard = DashboardManager()
     
 
     def __str__(self):
-        return '{} - Service'.format(self.employee) 
+        return '{0} - {1}'.format(self.employee, self.department) 
 
 class EmployeeVote(models.Model):
     employee = models.OneToOneField(Employees, on_delete=models.CASCADE, primary_key=True,)

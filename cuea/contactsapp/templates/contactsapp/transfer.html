@@ -382,7 +382,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/retired-employees">
+            <a class="nav-link" href="/transfer">
               <i class="menu-icon mdi mdi-account-arrow-right"></i>
               <span class="menu-title">Dept Transfer</span>
             </a>
@@ -411,23 +411,13 @@
                   <h4 class="card-title">Department-Section Transfer</h4>
                   <form method="post" action="/transfer">
                     {%csrf_token%}
-                  <div class="form-group">
-                    <label>Select Current Department</label>
-                    <select name="current_dept" class="js-example-basic-single w-100">
-                        {% for section in sections %}
-                             <option value="{{section.id}}">{{section.section}}</option>
-                        {% endfor %}
-                    </select>
-                  </div>
 
                   <div class="form-group">
                     <label>Select Employee</label>
                     <select name="employee"  class="js-example-basic-single w-100">
-                      <option value="AL">Alabama</option>
-                      <option value="WY">Wyoming</option>
-                      <option value="AM">America</option>
-                      <option value="CA">Canada</option>
-                      <option value="RU">Russia</option>
+                      {% for emp in employees %}
+                             <option value="{{emp.id}}">{{emp.name}} - {{emp.pf_number}} - {{emp.employeeservice.department}}</option>
+                        {% endfor %}
                     </select>
                   </div>
 
@@ -440,6 +430,9 @@
                     </select>
                   </div>
                   <button type="submit" class="btn btn-primary me-2">Submit</button>
+                  <span class="text-success">{{success}}</span>
+                  <span class="text-danger">{{error}}</span>
+
                 </form>
                 </div>
               </div>

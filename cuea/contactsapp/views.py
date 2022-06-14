@@ -20,13 +20,13 @@ class LoginView(View):
     template_name = "contactsapp/login.html"
     
     def get(self, request):
-        sections_set = set()
-        f = open("sections_list.txt", "r")
-        for line in f.readlines():
-            sections_set.add(line.strip())
-        for section in sections_set:
-            unit = Unit.objects.first()
-            Section.objects.create(section=section, unit=unit)
+        # sections_set = set()
+        # f = open("sections_list.txt", "r")
+        # for line in f.readlines():
+        #     sections_set.add(line.strip())
+        # for section in sections_set:
+        #     unit = Unit.objects.first()
+        #     Section.objects.create(section=section, unit=unit)
         
         return render(request, self.template_name)
         
@@ -74,8 +74,11 @@ class UploadCSView(LoginRequiredMixin, View):
                     handle_uploaded_file(csv_data)
                     success_message = 'Uploaded Successfuly'
                     csv_reader = CSVProcess()
-                    csv_reader.feed_db()
-            return render(request, self.template_name, {'success_message': success_message})
+                    status, error_message = csv_reader.feed_db()
+                    if status:
+                        return render(request, self.template_name, {'success_message': success_message})
+                    else:
+                        return render(request, self.template_name, {'upload_error': error_message})
 
 class EmployeesListView(LoginRequiredMixin, ListView):
     paginate_by = 20
@@ -130,13 +133,32 @@ class ExportCSView(LoginRequiredMixin, View):
 class TransferListView(LoginRequiredMixin, View):
     template_name = "contactsapp/transfer.html"
     sections = Section()
+    employee = Employees()
     context = {}
     
     def get(self, request):
         self.context['sections'] = self.sections.get_all_sections()
+        self.context['employees'] = self.employee.get_all_employees()
         return render(request, self.template_name, self.context)
     
     def post(self, request):
-        print(request.POST)
+        data = request.POST
+        print(data)
+        employee = data.get('employee', None)
+        target_department_id = data.get('target_dept', None)
+
+        if employee and target_department_id:
+            target_department = Section.objects.get(id=target_department_id)
+            employee = Employees.objects.get(id=employee)
+            employee.employeeservice.department  = target_department
+            employee.employeeservice.save()
+            self.context['success'] = 'Employee Transferred successfully' 
+
+        else:
+            self.context['error'] = 'Select employee and department' 
+        
+        return render(request, self.template_name, self.context)
+
+
 
 
