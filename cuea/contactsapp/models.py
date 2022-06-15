@@ -39,10 +39,10 @@ class Employees(models.Model):
         return Employees.objects.filter(pf_number = pf_num).exists()
     
     def get_all_employees(self, is_retired=False):
-        return Employees.objects.select_related('employeeservice').select_related('employeevote').filter(employeeservice__is_retired=is_retired).defer('address')
+        return Employees.objects.select_related('employeeservice').select_related('employeevote').filter(employeeservice__is_retired=is_retired, employeeservice__is_current_employee=True).defer('address')
 
     def get_searched_employee(self, seach_key):
-        searched_employees = Employees.objects.select_related('employeeservice').select_related('employeevote').filter(Q(employeeservice__is_retired=False)&
+        searched_employees = Employees.objects.select_related('employeeservice').select_related('employeevote').filter(Q(employeeservice__is_retired=False, is_current_employee=True)&
                     Q(name__icontains=seach_key) | Q(sex__icontains=seach_key) | Q(employeeservice__designation__icontains=seach_key)
                     | Q(blood_group__icontains=seach_key) | Q(address__icontains=seach_key)|
                     Q(district__icontains=seach_key) | Q(pan_mun_cop__icontains=seach_key)|
@@ -71,6 +71,7 @@ class Employees(models.Model):
         new_keys = {'Gender': 'sex', 'Blood Group': 'blood_group', 'Designation':'employeeservice__designation', 'Department':'employeeservice__department', 'Membership': 'employeeservice__membership', 'Deshabhimani Subscription':'employeevote__deshabhimani_sub'}
         query_dict = {new_keys[key]:value for key,value in parameter_object.items()}
         query_dict['employeeservice__is_retired'] = False
+        query_dict['employeeservice__is_current_employee'] = True
         filtered_queryset = Employees.objects.select_related('employeeservice').select_related('employeevote').filter(**query_dict)
         return filtered_queryset
 
@@ -117,7 +118,8 @@ class EmployeeService(models.Model):
     date_of_entry = models.DateField(null=True)
     date_of_retire = models.DateField(null=True)
     is_retired =  models.BooleanField(default=False)
-    exit_remark = models.CharField(max_length=50)
+    is_current_employee =  models.BooleanField(default=True)
+    exit_remark = models.CharField(max_length=50, default="Retired")
 
     objects = models.Manager()
     dashboard = DashboardManager()

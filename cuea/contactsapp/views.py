@@ -143,7 +143,6 @@ class TransferListView(LoginRequiredMixin, View):
     
     def post(self, request):
         data = request.POST
-        print(data)
         employee = data.get('employee', None)
         target_department_id = data.get('target_dept', None)
 
@@ -152,13 +151,44 @@ class TransferListView(LoginRequiredMixin, View):
             employee = Employees.objects.get(id=employee)
             employee.employeeservice.department  = target_department
             employee.employeeservice.save()
-            self.context['success'] = 'Employee Transferred successfully' 
+            self.context['message'] = 'Employee Transferred successfully' 
+            self.context['status'] = 'success' 
 
         else:
-            self.context['error'] = 'Select employee and department' 
+            self.context['message'] = 'Select employee and department' 
+            self.context['status'] = 'danger' 
+
         
         return render(request, self.template_name, self.context)
 
 
 
+
+class IUTReliveListView(LoginRequiredMixin, View):
+    template_name = "contactsapp/iut_relieve.html"
+    employee = Employees()
+    context = {}
+    
+    def get(self, request):
+        self.context['message'] = ''
+        self.context['employees'] = self.employee.get_all_employees()
+        return render(request, self.template_name, self.context)
+    
+    def post(self, request):
+        data = request.POST
+        employee = data.get('employee', None)
+        remark = data.get('remark', None)
+
+        if employee and remark:
+            employee = Employees.objects.get(id=employee)
+            employee.employeeservice.is_current_employee = False
+            employee.employeeservice.exit_remark = remark
+            employee.employeeservice.save()
+            self.context['message'] = 'Exit marked successfully!' 
+            self.context['status'] = 'success' 
+        else:
+            self.context['message'] = 'Select employee and add remark!' 
+            self.context['status'] = 'danger' 
+
+        return render(request, self.template_name, self.context)
 
