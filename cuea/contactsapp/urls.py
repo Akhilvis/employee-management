@@ -14,6 +14,7 @@ urlpatterns = [
     path('retired', RetiredEmployeesListView.as_view(), name="list_retired_employee_view"),
     path('transfer', TransferListView.as_view(), name="transfer_employee_view"),
     path('iut-relieve', IUTReliveListView.as_view(), name="iut_relieve"),
+    path('details/<pk>', EmployeeDetailView.as_view(), name="employee_detail_view"),
 
     path('search-employee', SearchEmployeeListView.as_view(), name='search_employee'),
     path('filter-employees', FilterEmployeeListView.as_view(), name="filter_list_employee_view"),

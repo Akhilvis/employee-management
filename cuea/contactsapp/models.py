@@ -152,6 +152,6 @@ class Activities(models.Model):
     
     @classmethod
     def get_activities(cls):
-        return cls.objects.values('activity', 'datetime')
+        return cls.objects.values('activity', 'datetime').order_by('-id')
 
     

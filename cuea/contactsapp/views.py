@@ -10,7 +10,7 @@ from .forms import *
 from .csv import CSVProcess
 from .models import *
 
-from django.views.generic import ListView, TemplateView, View
+from django.views.generic import ListView, TemplateView, View, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
@@ -149,8 +149,10 @@ class TransferListView(LoginRequiredMixin, View):
         if employee and target_department_id:
             target_department = Section.objects.get(id=target_department_id)
             employee = Employees.objects.get(id=employee)
+            current_dept = employee.employeeservice.department
             employee.employeeservice.department  = target_department
             employee.employeeservice.save()
+            Activities.mark_activity('{name} transferred from {current_dept} to {target_dept}'.format(name=employee.name, current_dept=current_dept, target_dept=target_department.section))
             self.context['message'] = 'Employee Transferred successfully' 
             self.context['status'] = 'success' 
 
@@ -184,6 +186,8 @@ class IUTReliveListView(LoginRequiredMixin, View):
             employee.employeeservice.is_current_employee = False
             employee.employeeservice.exit_remark = remark
             employee.employeeservice.save()
+            Activities.mark_activity('{remark} marked against {name}'.format(remark=remark ,name=employee.name))
+
             self.context['message'] = 'Exit marked successfully!' 
             self.context['status'] = 'success' 
         else:
@@ -192,3 +196,16 @@ class IUTReliveListView(LoginRequiredMixin, View):
 
         return render(request, self.template_name, self.context)
 
+
+
+class EmployeeDetailView(LoginRequiredMixin, DetailView):
+    # specify the model to use
+    model = Employees
+  
+    # override context data
+    def get_context_data(self, *args, **kwargs):
+        context = super(EmployeeDetailView,
+             self).get_context_data(*args, **kwargs)
+        # add extra field 
+        context["category"] = "MISC"        
+        return context
