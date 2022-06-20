@@ -25,9 +25,10 @@ class CSVProcess:
                 employee.sex = emp.Sex
                 employee.mobile = emp.Mob
                 employee.blood_group = emp.Blood
-                employee.adddress = emp.Address
+                employee.address = emp.Address
                 employee.district = emp.District
                 employee.pan_mun_cop = emp.Pan_Mun_Cor
+                employee.pin_code = emp.PinCode
                 employee.save()
 
                 employee_service = EmployeeService()

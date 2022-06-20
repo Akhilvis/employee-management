@@ -258,6 +258,13 @@
         <div class="content-wrapper">
           <div class="row">
             <div class="col-12 grid-margin">
+              <form method="post" {% url 'employee_detail_view' object.pk %}>
+                {% csrf_token %}
+                <input type="hidden" name="pf_number" value="{{object.pf_number}}">
+                <input type="hidden" name="sex" value="{{object.sex}}">
+                <input type="hidden" name="employee" value="{{object.pk}}">
+
+
                 <div class="card">
                   <div class="card-body">
                     <form class="form-sample">
@@ -267,7 +274,7 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">FullName</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control" value="{{object.name}}">
+                              <input type="text" name="name" class="form-control" value="{{object.name}}">
                             </div>
                           </div>
                         </div>
@@ -275,7 +282,7 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Designation</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control"  value="{{object.employeeservice.designation}}">
+                              <input type="text" class="form-control" name="designation"  value="{{object.employeeservice.designation}}">
                             </div>
                           </div>
                         </div>
@@ -285,7 +292,15 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Membership</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control"   value="{{object.employeeservice.membership}}">
+                              <select class="form-control"  name="membership" >
+                                {% for key, value in object.employeeservice.MEMBERSHIP_CHOICES %}
+                                {% if key == object.employeeservice.membership %}
+                                <option selected>{{key}}</option>
+                                {% else %}
+                                <option>{{key}}</option>
+                                {% endif %}
+                                {% endfor %}
+                              </select>
                             </div>
                           </div>
                         </div>
@@ -293,7 +308,15 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Department</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control"   value="{{object.employeeservice.department}}">
+                              <select class="form-control"  name="department" >
+                                {% for section in sections %}
+                                {% if section == object.employeeservice.department %}
+                                <option value={{section.pk}} selected>{{section}}</option>
+                                {% else %}
+                                <option value={{section.pk}} >{{section}}</option>
+                                {% endif %}
+                                {% endfor %}
+                              </select>                            
                             </div>
                           </div>
                         </div>
@@ -303,7 +326,7 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Blood Group</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control"   value="{{object.blood_group}}">
+                              <input type="text" name="blood_group" class="form-control"   value="{{object.blood_group}}">
                             </div>
                           </div>
                         </div>
@@ -311,7 +334,7 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Mobile</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control"   value="{{object.mobile}}">
+                              <input type="text" name="mobile"  class="form-control"   value="{{object.mobile}}">
                             </div>
                           </div>
                         </div>
@@ -321,7 +344,7 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Deshabhimani</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control">
+                              <input type="text" class="form-control"   value="{{object.employeevote.deshabhimani_sub}}">
                             </div>
                           </div>
                         </div>
@@ -329,7 +352,7 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Subscription Amount</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control">
+                              <input type="text" class="form-control" disabled value="{{object.employeevote.subscription_amount}}">
                             </div>
                           </div>
                         </div>
@@ -339,7 +362,7 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Date of Entry</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control">
+                              <input type="text" class="form-control" disabled value="{{object.employeeservice.date_of_entry}}">
                             </div>
                           </div>
                         </div>
@@ -347,7 +370,7 @@
                           <div class="form-group row">
                             <label class="col-sm-3 col-form-label">Date of Exit</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control">
+                              <input type="text" class="form-control" disabled value="{{object.employeeservice.date_of_retire}}">
                             </div>
                           </div>
                         </div>
@@ -356,47 +379,51 @@
                       <div class="row">
                         <div class="col-md-6">
                           <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Category</label>
+                            <label class="col-sm-3 col-form-label">Address</label>
                             <div class="col-sm-9">
-                              <select class="form-control" disabled>
-                                <option>Category1</option>
-                                <option>Category2</option>
-                                <option>Category3</option>
-                                <option>Category4</option>
-                              </select>
+                              <input type="text" name="address" disabled  class="form-control" value="{{object.address}}">
                             </div>
                           </div>
                         </div>
-
+                        <div class="col-md-6">
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Pincode</label>
+                            <div class="col-sm-9">
+                              <input type="text" name="pin_code" disabled class="form-control" value="{{object.pin_code}}">
+                            </div>
+                          </div>
+                        </div>
                       </div>
 
                       <div class="row">
                         <div class="col-md-6">
                           <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">City</label>
+                            <label class="col-sm-3 col-form-label">Pan/Mun/Corporation</label>
                             <div class="col-sm-9">
-                              <input type="text" class="form-control">
+                              <input type="text" name="pan_mun_cop" disabled class="form-control" value="{{object.pan_mun_cop}}">
                             </div>
                           </div>
                         </div>
                         <div class="col-md-6">
                           <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Country</label>
+                            <label class="col-sm-3 col-form-label">District</label>
                             <div class="col-sm-9">
-                              <select class="form-control">
-                                <option>America</option>
-                                <option>Italy</option>
-                                <option>Russia</option>
-                                <option>Britain</option>
-                              </select>
+                              <input type="text" name="district" disabled class="form-control" value="{{object.district}}">
                             </div>
                           </div>
                         </div>
                       </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <button type="submit" class="btn btn-primary me-2">Update</button>
+                        </div>
+                      </div>
+
                     </form>
                   </div>
                 </div>
               </div>
+            </form>
           </div>
         </div>
         <!-- content-wrapper ends -->

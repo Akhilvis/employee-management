@@ -1,6 +1,6 @@
 import csv
 from urllib import request
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 
@@ -196,6 +196,7 @@ class IUTReliveListView(LoginRequiredMixin, View):
 
         return render(request, self.template_name, self.context)
 
+from django.contrib import messages
 
 
 class EmployeeDetailView(LoginRequiredMixin, DetailView):
@@ -207,5 +208,26 @@ class EmployeeDetailView(LoginRequiredMixin, DetailView):
         context = super(EmployeeDetailView,
              self).get_context_data(*args, **kwargs)
         # add extra field 
-        context["category"] = "MISC"        
+        context["sections"] = Section.objects.all()       
         return context
+    
+    def post(self, request, pk):
+          instance = get_object_or_404(Employees, pk=pk)
+          print(request.POST)
+          input_data = request.POST.dict()
+          form = EmployeesUpdateForm(instance=instance, data=input_data)
+
+          if form.is_valid():
+            obj  = form.save()
+            service_instance = get_object_or_404(EmployeeService, employee=instance)
+            print(999, input_data['department'])
+            input_data['department'] = get_object_or_404(Section, pk=input_data['department'])
+
+            service_form = EmployeeServiceUpdateForm(instance=service_instance, data=input_data)
+            if service_form.is_valid():
+                service_form.save()
+            else:
+                print(service_form.errors.as_json())
+            return redirect('employee_detail_view', instance.pk)
+          else:
+            print("=========================error====", form.errors)
