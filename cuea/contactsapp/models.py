@@ -42,13 +42,16 @@ class Employees(models.Model):
         return Employees.objects.select_related('employeeservice').select_related('employeevote').filter(employeeservice__is_retired=is_retired, employeeservice__is_current_employee=True).defer('address')
 
     def get_searched_employee(self, seach_key):
-        searched_employees = Employees.objects.select_related('employeeservice').select_related('employeevote').filter(Q(employeeservice__is_retired=False, is_current_employee=True)&
+        searched_employees = Employees.objects.select_related('employeeservice').select_related('employeevote').filter(Q(employeeservice__is_retired=False, employeeservice__is_current_employee=True)&
                     Q(name__icontains=seach_key) | Q(sex__icontains=seach_key) | Q(employeeservice__designation__icontains=seach_key)
                     | Q(blood_group__icontains=seach_key) | Q(address__icontains=seach_key)|
                     Q(district__icontains=seach_key) | Q(pan_mun_cop__icontains=seach_key)|
-                    Q(employeeservice__department__icontains=seach_key) | Q(employeeservice__membership__icontains=seach_key)|
-                    Q(employeevote__legislative_assembly__icontains=seach_key) | Q(employeevote__loksabha_constituency__icontains=seach_key)|
-                    Q(employeevote__deshabhimani_sub__icontains=seach_key)|  Q(mobile__icontains=seach_key)
+                    Q(employeevote__loksabha_constituency__icontains=seach_key)|
+                    Q(employeevote__deshabhimani_sub__icontains=seach_key)|  
+                    Q(mobile__icontains=seach_key)|
+                    Q(employeeservice__department__section__icontains=seach_key) | 
+                    Q(employeeservice__membership__icontains=seach_key)|
+                    Q(employeevote__legislative_assembly__icontains=seach_key) 
 
                 ).defer('address')
         return searched_employees

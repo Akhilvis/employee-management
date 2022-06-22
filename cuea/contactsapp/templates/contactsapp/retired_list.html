@@ -43,28 +43,18 @@
         </div>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-top"> 
-        <ul class="navbar-nav">
+        <ul class="navbar-nav" style="width:96%">
           <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
-            <h1 class="welcome-text">Retired</h1>
-            {% comment %} <h3 class="welcome-sub-text">Your performance summary this week </h3> {% endcomment %}
+            <h1 class="welcome-text">Retired Employees</h1>
           </li>
+          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas">
+            <span class="mdi mdi-menu"></span>
+          </button>
         </ul>
-        <ul class="navbar-nav ms-auto" style="width: 80%;">
-          <form action="search-employee" method="get" style="width:80%;">
-          <li class="nav-item" style="display: inline-flex;width: 100%;">
-            <input class="form-control" type="text" name="search_keyword" placeholder="Search Name,Gender,Designation etc..." aria-label="Search" style="height: 1%;">
-            <button type="submit" class="btn btn-success" style="width: 25%;">Seach</button>
-          </li>
-        </form>
-        </ul>
-        {% comment %} <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas">
-          <span class="mdi mdi-menu"></span>
-        </button> {% endcomment %}
-        <button type="button" onclick="toggle_filters()" class="btn btn-info btn-icon-text" style="display:flex;">
-          Filters
-          <i class="ti-filter btn-icon-append"></i>                                                                              
-        </button>
-      </div>
+        <div style="cursor:pointer">
+          <a href="/logout" style="font-size: xx-large;"><i class="dropdown-item-icon mdi mdi-power me-2"></i></a>
+        </div>
+    </div>
     </nav>
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
