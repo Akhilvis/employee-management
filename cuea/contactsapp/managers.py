@@ -14,7 +14,7 @@ class DashboardManager(models.Manager):
         return self.filter(membership='Neutral').count()
     
     def mark_retirement(self):
-        retire_employees_queyset = self.filter(date_of_retire__lte=datetime.datetime.now(), is_retired=False)
+        retire_employees_queyset = self.filter(date_of_retire__lte=datetime.datetime.now(), is_retired=False, is_current_employee=True)
         
         for retired_employee in retire_employees_queyset:
             contactsapp.models.Activities.mark_activity('{name} was retired on {date}'.format(name=retired_employee.employee.name, date=retired_employee.date_of_retire))

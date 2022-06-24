@@ -286,6 +286,65 @@
                 </div>
               </div>
             </div>
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <div>
+                  </div>
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>
+                            Gender
+                          </th>
+                          <th>
+                            Name
+                          </th>
+                          <th>
+                            Department
+                          </th>
+                          <th>
+                            Remark
+                          </th>
+                          <th>
+                            Details
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        
+                        {% for emp in ex_employees %}
+                        <tr>
+                          <td width="5%" class="py-1">
+                            {% if emp.sex == 'M'%}
+                            <img src="/static/images/faces/face1.png" alt="male"/>
+                            {% else %}
+                            <img src="/static/images/faces/face2.png" alt="female"/>
+                            {% endif %}
+                          </td>
+                          <td width="15%" >
+                            {{ emp.name}}
+                          </td>
+                          <td width="25%" >
+                            {{ emp.employeeservice.department }}
+                          </td>
+                          <td width="25%"  >
+                            {{ emp.employeeservice.exit_remark }}
+                          </td>
+                          <td width="5%" style="padding: 1% 2%;"  title="More details">
+                            <a href="/details/{{emp.id}}"><i class="mdi mdi-content-paste menu-icon" style="font-size:20px;"></i></a>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                        
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <!-- content-wrapper ends -->

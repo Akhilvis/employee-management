@@ -72,12 +72,14 @@ class CSVProcess:
         #Header
         writer.writerow(['Sl No.', 'PFNo', 'Name', 'Sex', 'Designation', 'Dept', 'Blood', 'DoE', 'DoR', 'Membership', 'Mob', 'email', 
         'Address', 'District', 'PinCode', 'VotersId', 'Pan_Mun_Cor', 'LegislativeAssembly', 'LokSabhaConstituency', 'other Religious/ political/ social orgnanisations', 'Deshabimanisubscription'
-        , 'Yearlysubscription'])
+        , 'Yearlysubscription', 'Unit'])
         for num, emp in enumerate(query_set, start=1):
             output.append([num, emp.pf_number, emp.name, emp.sex, emp.employeeservice.designation, emp.employeeservice.department, emp.blood_group, '', '', emp.employeeservice.membership,
             emp.mobile, 'email', emp.address, emp.district, emp.pin_code, emp.employeevote.voters_id, 
             emp.pan_mun_cop, emp.employeevote.legislative_assembly, emp.employeevote.loksabha_constituency
-            , '', emp.employeevote.deshabhimani_sub, emp.employeevote.subscription_amount])
+            , '', emp.employeevote.deshabhimani_sub, emp.employeevote.subscription_amount, 
+            emp.employeeservice.department.unit
+            ])
         #CSV Data
         writer.writerows(output)
         return response

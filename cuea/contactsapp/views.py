@@ -19,15 +19,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 class LoginView(View):
     template_name = "contactsapp/login.html"
     
-    def get(self, request):
-        # sections_set = set()
-        # f = open("sections_list.txt", "r")
-        # for line in f.readlines():
-        #     sections_set.add(line.strip())
-        # for section in sections_set:
-        #     unit = Unit.objects.first()
-        #     Section.objects.create(section=section, unit=unit)
-        
+    def get(self, request):        
         return render(request, self.template_name)
         
     def post(self, request):
@@ -174,6 +166,8 @@ class IUTReliveListView(LoginRequiredMixin, View):
     def get(self, request):
         self.context['message'] = ''
         self.context['employees'] = self.employee.get_all_employees()
+        self.context['ex_employees'] = self.employee.get_all_employees(is_current_employee=False)
+
         return render(request, self.template_name, self.context)
     
     def post(self, request):
