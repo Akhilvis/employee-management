@@ -35,6 +35,7 @@ class CSVProcess:
                 employee_service.employee = employee
                 employee_service.designation = emp.Designation
                 try:
+                    print('section=emp.Dept............   ', emp.Dept)
                     employee_service.department = Section.objects.get(section=emp.Dept)
                 except:
                     return False, '{pf} - Wrong Department!'.format(pf=emp.PFNo)
@@ -74,7 +75,7 @@ class CSVProcess:
         'Address', 'District', 'PinCode', 'VotersId', 'Pan_Mun_Cor', 'LegislativeAssembly', 'LokSabhaConstituency', 'other Religious/ political/ social orgnanisations', 'Deshabimanisubscription'
         , 'Yearlysubscription', 'Unit'])
         for num, emp in enumerate(query_set, start=1):
-            output.append([num, emp.pf_number, emp.name, emp.sex, emp.employeeservice.designation, emp.employeeservice.department, emp.blood_group, '', '', emp.employeeservice.membership,
+            output.append([num, emp.pf_number, emp.name, emp.sex, emp.employeeservice.designation, emp.employeeservice.department.section, emp.blood_group, '', '', emp.employeeservice.membership,
             emp.mobile, 'email', emp.address, emp.district, emp.pin_code, emp.employeevote.voters_id, 
             emp.pan_mun_cop, emp.employeevote.legislative_assembly, emp.employeevote.loksabha_constituency
             , '', emp.employeevote.deshabhimani_sub, emp.employeevote.subscription_amount, 

@@ -8,7 +8,7 @@ def handle_uploaded_file(f):
             destination.write(chunk)
 
 def load_data():
-    Unit.objects.bulk_create([Unit(unit=1) for i in range(1, 10)])
+    Unit.objects.bulk_create([Unit(unit=i) for i in range(1, 10)])
     sections_set = set()
     f = open("sections_list.txt", "r")
     for line in f.readlines():
