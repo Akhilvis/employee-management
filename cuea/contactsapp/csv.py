@@ -13,7 +13,6 @@ class CSVProcess:
     def feed_db(self):
         df = pd.read_csv(self.csv_file)
         for i, emp in df.iterrows():
-            print(i,emp)
             employee = Employees()
             if employee.is_old_employee(emp.PFNo):
                 employee = Employees.objects.get(pf_number = emp.PFNo)
@@ -35,7 +34,6 @@ class CSVProcess:
                 employee_service.employee = employee
                 employee_service.designation = emp.Designation
                 try:
-                    print('section=emp.Dept............   ', emp.Dept)
                     employee_service.department = Section.objects.get(section=emp.Dept)
                 except:
                     return False, '{pf} - Wrong Department!'.format(pf=emp.PFNo)
@@ -53,13 +51,14 @@ class CSVProcess:
                 employee_vote.subscription_amount = emp.Yearlysubscription
                 employee_vote.save()
             
-            except :
+            except Exception as error:
+                print("error>>>>>  ",error)
                 return False, '{pf} - Wrong Input!'.format(pf=emp.PFNo)
 
         return True,None
 
     def date_parsing(self, date_string):
-        date, month, year = date_string.split("-")
+        year, month, date = date_string.split("-")
         return datetime.date(int(year), int(month), int(date))
 
     def export_csv(self, url_params):
@@ -75,7 +74,7 @@ class CSVProcess:
         'Address', 'District', 'PinCode', 'VotersId', 'Pan_Mun_Cor', 'LegislativeAssembly', 'LokSabhaConstituency', 'other Religious/ political/ social orgnanisations', 'Deshabimanisubscription'
         , 'Yearlysubscription', 'Unit'])
         for num, emp in enumerate(query_set, start=1):
-            output.append([num, emp.pf_number, emp.name, emp.sex, emp.employeeservice.designation, emp.employeeservice.department.section, emp.blood_group, '', '', emp.employeeservice.membership,
+            output.append([num, emp.pf_number, emp.name, emp.sex, emp.employeeservice.designation, emp.employeeservice.department.section, emp.blood_group, emp.employeeservice.date_of_entry,emp.employeeservice.date_of_retire, emp.employeeservice.membership,
             emp.mobile, 'email', emp.address, emp.district, emp.pin_code, emp.employeevote.voters_id, 
             emp.pan_mun_cop, emp.employeevote.legislative_assembly, emp.employeevote.loksabha_constituency
             , '', emp.employeevote.deshabhimani_sub, emp.employeevote.subscription_amount, 
